@@ -1,0 +1,15 @@
+{
+  "name": "extension",
+  "version": "1.0.0",
+  "main": "api.js",
+  "scripts": {
+    "build": "esbuild content.js --bundle --outfile=content.bundle.js --platform=browser --target=chrome90"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "esbuild": "^0.28.0"
+  }
+}

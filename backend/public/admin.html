@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Green Shopping — Admin Dashboard</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, sans-serif; background: #f9fafb; color: #111; }
+
+    /* Layout */
+    .sidebar { position: fixed; top: 0; left: 0; width: 220px; height: 100vh; background: #14532d; padding: 24px 16px; }
+    .sidebar h1 { color: #fff; font-size: 15px; font-weight: 700; margin-bottom: 28px; }
+    .nav-item { display: block; padding: 10px 12px; color: #bbf7d0; font-size: 13px; cursor: pointer; border-radius: 6px; margin-bottom: 4px; }
+    .nav-item:hover, .nav-item.active { background: #166534; color: #fff; }
+    .main { margin-left: 220px; padding: 28px; }
+
+    /* Stats */
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
+    .stat-card { background: #fff; border-radius: 10px; padding: 20px; border: 1px solid #e5e7eb; }
+    .stat-card .num { font-size: 32px; font-weight: 700; color: #15803d; }
+    .stat-card .label { font-size: 12px; color: #6b7280; margin-top: 4px; }
+
+    /* Sections */
+    .section { display: none; }
+    .section.active { display: block; }
+    .section-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; }
+
+    /* Table */
+    table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; border: 1px solid #e5e7eb; }
+    th { background: #f3f4f6; padding: 10px 14px; text-align: left; font-size: 12px; color: #6b7280; font-weight: 600; text-transform: uppercase; }
+    td { padding: 10px 14px; font-size: 13px; border-top: 1px solid #f3f4f6; }
+    tr:hover td { background: #f9fafb; }
+
+    /* Buttons */
+    .btn { padding: 7px 14px; border-radius: 6px; border: none; cursor: pointer; font-size: 12px; font-weight: 500; }
+    .btn-green  { background: #16a34a; color: #fff; }
+    .btn-green:hover { background: #15803d; }
+    .btn-red    { background: #fee2e2; color: #dc2626; }
+    .btn-red:hover { background: #fecaca; }
+    .btn-blue   { background: #eff6ff; color: #1d4ed8; }
+
+    /* Form */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+    input, select, textarea {
+      width: 100%; padding: 8px 10px; border: 1px solid #d1d5db;
+      border-radius: 6px; font-size: 13px; background: #fff;
+    }
+    label { font-size: 12px; color: #6b7280; display: block; margin-bottom: 4px; }
+    .form-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+    .form-card h3 { font-size: 14px; font-weight: 600; margin-bottom: 14px; }
+
+    /* Score badge */
+    .score-badge { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 11px; font-weight: 700; }
+    .score-high { background: #dcfce7; color: #15803d; }
+    .score-mid  { background: #fef9c3; color: #854d0e; }
+    .score-low  { background: #fee2e2; color: #dc2626; }
+
+    .tag { display: inline-block; background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; padding: 2px 7px; border-radius: 99px; font-size: 11px; margin: 1px; }
+    .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .toast { position: fixed; bottom: 20px; right: 20px; background: #14532d; color: #fff; padding: 12px 20px; border-radius: 8px; font-size: 13px; display: none; z-index: 999; }
+  </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <h1>🌿 Admin Panel</h1>
+  <div class="nav-item active" onclick="showSection('dashboard')">📊 Dashboard</div>
+  <div class="nav-item" onclick="showSection('products')">📦 Products</div>
+  <div class="nav-item" onclick="showSection('brands')">🏷️ Brands</div>
+  <div class="nav-item" onclick="showSection('feedback')">💬 Feedback</div>
+</div>
+
+<!-- Main Content -->
+<div class="main">
+
+  <!-- DASHBOARD -->
+  <div id="section-dashboard" class="section active">
+    <div class="section-title">Dashboard Overview</div>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="num" id="stat-products">—</div>
+        <div class="label">Total Products</div>
+      </div>
+      <div class="stat-card">
+        <div class="num" id="stat-brands">—</div>
+        <div class="label">Total Brands</div>
+      </div>
+      <div class="stat-card">
+        <div class="num" id="stat-feedback">—</div>
+        <div class="label">User Feedback</div>
+      </div>
+    </div>
+
+    <div class="section-title">Top Sustainable Brands</div>
+    <table>
+      <thead><tr><th>Brand</th><th>Sustainability Rating</th></tr></thead>
+      <tbody id="top-brands-table"></tbody>
+    </table>
+  </div>
+
+  <!-- PRODUCTS -->
+  <div id="section-products" class="section">
+    <!-- Add Product Form -->
+    <div class="form-card">
+      <h3>➕ Add New Product</h3>
+      <div class="form-grid">
+        <div><label>Product Name</label><input id="p-name" placeholder="e.g. Klean Kanteen Classic"></div>
+        <div><label>Brand ID</label><input id="p-brand" type="number" placeholder="e.g. 1"></div>
+        <div><label>Category</label>
+          <select id="p-category">
+            <option value="water-bottle">Water Bottle</option>
+            <option value="clothing">Clothing</option>
+            <option value="beauty">Beauty</option>
+            <option value="bags">Bags</option>
+            <option value="footwear">Footwear</option>
+            <option value="electronics">Electronics</option>
+          </select>
+        </div>
+        <div><label>Score (0-100)</label><input id="p-score" type="number" min="0" max="100"></div>
+        <div><label>Price</label><input id="p-price" placeholder="e.g. $35"></div>
+        <div><label>Tags (comma separated)</label><input id="p-tags" placeholder="e.g. BPA-free, Recycled"></div>
+        <div style="grid-column:span 2"><label>Amazon URL</label><input id="p-url" placeholder="https://amazon.com/..."></div>
+      </div>
+      <button class="btn btn-green" onclick="addProduct()">Add Product</button>
+    </div>
+
+    <!-- Products Table -->
+    <div class="toolbar">
+      <div class="section-title" style="margin:0">All Products</div>
+      <button class="btn btn-blue" onclick="loadProducts()">🔄 Refresh</button>
+    </div>
+    <table>
+      <thead><tr><th>ID</th><th>Name</th><th>Brand</th><th>Category</th><th>Score</th><th>Tags</th><th>Actions</th></tr></thead>
+      <tbody id="products-table"></tbody>
+    </table>
+  </div>
+
+  <!-- BRANDS -->
+  <div id="section-brands" class="section">
+    <!-- Add Brand Form -->
+    <div class="form-card">
+      <h3>➕ Add New Brand</h3>
+      <div class="form-grid">
+        <div><label>Brand Name</label><input id="b-name" placeholder="e.g. Patagonia"></div>
+        <div><label>Sustainability Rating (0-100)</label><input id="b-rating" type="number" min="0" max="100"></div>
+        <div><label>Country</label><input id="b-country" placeholder="e.g. USA"></div>
+        <div><label>Website</label><input id="b-website" placeholder="https://..."></div>
+        <div style="grid-column:span 2"><label>Description</label><textarea id="b-description" rows="2"></textarea></div>
+        <div>
+          <label>Carbon Neutral?</label>
+          <select id="b-carbon"><option value="false">No</option><option value="true">Yes</option></select>
+        </div>
+      </div>
+      <button class="btn btn-green" onclick="addBrand()">Add Brand</button>
+    </div>
+
+    <!-- Brands Table -->
+    <div class="toolbar">
+      <div class="section-title" style="margin:0">All Brands</div>
+      <button class="btn btn-blue" onclick="loadBrands()">🔄 Refresh</button>
+    </div>
+    <table>
+      <thead><tr><th>ID</th><th>Name</th><th>Rating</th><th>Country</th><th>Carbon Neutral</th><th>Verified</th><th>Actions</th></tr></thead>
+      <tbody id="brands-table"></tbody>
+    </table>
+  </div>
+
+  <!-- FEEDBACK -->
+  <div id="section-feedback" class="section">
+    <div class="toolbar">
+      <div class="section-title" style="margin:0">User Feedback</div>
+      <button class="btn btn-blue" onclick="loadFeedback()">🔄 Refresh</button>
+    </div>
+    <table>
+      <thead><tr><th>ID</th><th>Product</th><th>Rating</th><th>Comment</th><th>Helpful</th><th>Site</th><th>Date</th></tr></thead>
+      <tbody id="feedback-table"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- Toast notification -->
+<div class="toast" id="toast"></div>
+
+<script>
+  const API = 'http://localhost:3000';
+
+  // ── Navigation ──────────────────────────────────────────────
+  function showSection(name) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('section-' + name).classList.add('active');
+    event.target.classList.add('active');
+
+    if (name === 'dashboard')  loadDashboard();
+    if (name === 'products')   loadProducts();
+    if (name === 'brands')     loadBrands();
+    if (name === 'feedback')   loadFeedback();
+  }
+
+  // ── Toast ────────────────────────────────────────────────────
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.display = 'block';
+    setTimeout(() => t.style.display = 'none', 3000);
+  }
+
+  // ── Score badge ──────────────────────────────────────────────
+  function scoreBadge(score) {
+    const cls = score >= 70 ? 'score-high' : score >= 40 ? 'score-mid' : 'score-low';
+    return `<span class="score-badge ${cls}">${score}</span>`;
+  }
+
+  // ── DASHBOARD ────────────────────────────────────────────────
+  async function loadDashboard() {
+    const res  = await fetch(`${API}/admin/stats`);
+    const data = await res.json();
+    document.getElementById('stat-products').textContent = data.totalProducts;
+    document.getElementById('stat-brands').textContent   = data.totalBrands;
+    document.getElementById('stat-feedback').textContent = data.totalFeedback;
+
+    const tbody = document.getElementById('top-brands-table');
+    tbody.innerHTML = data.topBrands.map(b => `
+      <tr>
+        <td>${b.name}</td>
+        <td>${scoreBadge(b.sustainability_rating)}</td>
+      </tr>
+    `).join('');
+  }
+
+  // ── PRODUCTS ─────────────────────────────────────────────────
+  async function loadProducts() {
+    const res  = await fetch(`${API}/admin/products`);
+    const data = await res.json();
+    const tbody = document.getElementById('products-table');
+
+    tbody.innerHTML = data.products.map(p => `
+      <tr>
+        <td>${p.id}</td>
+        <td>${p.name}</td>
+        <td>${p.brand_name || '—'}</td>
+        <td>${p.category}</td>
+        <td>${scoreBadge(p.score)}</td>
+        <td>${(p.tags || []).map(t => `<span class="tag">${t}</span>`).join('')}</td>
+        <td>
+          <button class="btn btn-red" onclick="deleteProduct(${p.id})">Delete</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  async function addProduct() {
+    const body = {
+      name:     document.getElementById('p-name').value,
+      brand_id: parseInt(document.getElementById('p-brand').value),
+      category: document.getElementById('p-category').value,
+      score:    parseInt(document.getElementById('p-score').value),
+      price:    document.getElementById('p-price').value,
+      tags:     document.getElementById('p-tags').value.split(',').map(t => t.trim()),
+      url:      document.getElementById('p-url').value
+    };
+
+    const res = await fetch(`${API}/admin/products`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+
+    if (res.ok) { showToast('✅ Product added!'); loadProducts(); }
+    else        { showToast('❌ Error adding product'); }
+  }
+
+  async function deleteProduct(id) {
+    if (!confirm('Delete this product?')) return;
+    await fetch(`${API}/admin/products/${id}`, { method: 'DELETE' });
+    showToast('🗑️ Product deleted');
+    loadProducts();
+  }
+
+  // ── BRANDS ───────────────────────────────────────────────────
+  async function loadBrands() {
+    const res  = await fetch(`${API}/brands`);
+    const data = await res.json();
+    const tbody = document.getElementById('brands-table');
+
+    tbody.innerHTML = data.brands.map(b => `
+      <tr>
+        <td>${b.id}</td>
+        <td><strong>${b.name}</strong></td>
+        <td>${scoreBadge(b.sustainability_rating)}</td>
+        <td>${b.country || '—'}</td>
+        <td>${b.carbon_neutral ? '✅ Yes' : '❌ No'}</td>
+        <td>${b.verified ? '✅ Verified' : '⏳ Pending'}</td>
+        <td>
+          <button class="btn btn-blue"  onclick="verifyBrand(${b.id})">Verify</button>
+          <button class="btn btn-red"   onclick="deleteBrand(${b.id})">Delete</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  async function addBrand() {
+    const body = {
+      name:                  document.getElementById('b-name').value,
+      sustainability_rating: parseInt(document.getElementById('b-rating').value),
+      country:               document.getElementById('b-country').value,
+      website:               document.getElementById('b-website').value,
+      description:           document.getElementById('b-description').value,
+      carbon_neutral:        document.getElementById('b-carbon').value === 'true'
+    };
+
+    const res = await fetch(`${API}/brands`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+
+    if (res.ok) { showToast('✅ Brand added!'); loadBrands(); }
+    else        { showToast('❌ Error adding brand'); }
+  }
+
+  async function verifyBrand(id) {
+    await fetch(`${API}/brands/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ verified: true })
+    });
+    showToast('✅ Brand verified!');
+    loadBrands();
+  }
+
+  async function deleteBrand(id) {
+    if (!confirm('Delete this brand?')) return;
+    await fetch(`${API}/brands/${id}`, { method: 'DELETE' });
+    showToast('🗑️ Brand deleted');
+    loadBrands();
+  }
+
+  // ── FEEDBACK ─────────────────────────────────────────────────
+  async function loadFeedback() {
+    const res  = await fetch(`${API}/feedback`);
+    const data = await res.json();
+    const tbody = document.getElementById('feedback-table');
+
+    if (!data.feedback.length) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#999;padding:20px;">No feedback yet</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = data.feedback.map(f => `
+      <tr>
+        <td>${f.id}</td>
+        <td>${f.product_name || '—'}</td>
+        <td>${'⭐'.repeat(f.rating || 0)}</td>
+        <td>${f.comment || '—'}</td>
+        <td>${f.helpful ? '👍' : '👎'}</td>
+        <td>${f.site || '—'}</td>
+        <td>${new Date(f.created_at).toLocaleDateString()}</td>
+      </tr>
+    `).join('');
+  }
+
+  // Load dashboard on page open
+  loadDashboard();
+</script>
+</body>
+</html>

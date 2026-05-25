@@ -1,0 +1,68 @@
+{
+  "manifest_version": 3,
+  "name": "Green Shopping Assistant",
+  "version": "1.0",
+  "description": "Find eco-friendly alternatives while you shop online.",
+
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+
+  "host_permissions": [
+    "https://www.amazon.com/*",
+    "https://www.amazon.in/*",
+    "https://www.flipkart.com/*",
+    "https://www.etsy.com/*",
+    "https://shopping.google.com/*",
+    "https://www.google.com/*",
+    "http://localhost:3000/*"
+  ],
+
+  "background": {
+    "service_worker": "background.js"
+  },
+
+  "content_scripts": [
+  {
+    "matches": [
+      "https://www.amazon.com/*",
+      "https://www.amazon.in/*",
+      "https://www.flipkart.com/*",
+      "https://www.etsy.com/*",
+      "https://shopping.google.com/*",
+      "https://www.google.com/shopping*"
+    ],
+    "js": ["content.bundle.js"],
+    "css": ["sidebar/sidebar.css"]
+    }
+  ],
+
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16":  "icons/icon16.png",
+      "48":  "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+
+  "icons": {
+    "16":  "icons/icon16.png",
+    "48":  "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "data/products.json"
+      ],
+      "matches": [
+        "https://www.amazon.in/*",
+        "https://www.amazon.com/*"
+      ]
+    }
+  ]
+}

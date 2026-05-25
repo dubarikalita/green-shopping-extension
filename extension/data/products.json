@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "name": "Milton Thermosteel Flask",
+    "brand": "Milton",
+    "category": "water-bottle",
+    "price": "₹599",
+    "image": "https://m.media-amazon.com/images/I/51fKMbFfhkL._SX300_.jpg",
+    "url": "https://www.amazon.in/s?k=milton+thermosteel+flask",
+    "score": 82,
+    "reasons": ["Stainless steel", "BPA-free", "Reusable", "Durable"],
+    "certifications": []
+  },
+  {
+    "id": 2,
+    "name": "Borosil Glass Water Bottle",
+    "brand": "Borosil",
+    "category": "water-bottle",
+    "price": "₹449",
+    "image": "https://m.media-amazon.com/images/I/41uEIqkXNQL._SX300_.jpg",
+    "url": "https://www.amazon.in/s?k=borosil+glass+water+bottle",
+    "score": 78,
+    "reasons": ["Glass material", "BPA-free", "Reusable", "No plastic contact"],
+    "certifications": []
+  },
+  {
+    "id": 3,
+    "name": "Pexpo Stainless Steel Bottle",
+    "brand": "Pexpo",
+    "category": "water-bottle",
+    "price": "₹349",
+    "image": "https://m.media-amazon.com/images/I/51EuOWLpJgL._SX300_.jpg",
+    "url": "https://www.amazon.in/s?k=pexpo+stainless+steel+bottle",
+    "score": 75,
+    "reasons": ["Stainless steel", "BPA-free", "Reusable", "Budget friendly"],
+    "certifications": []
+  }
+]

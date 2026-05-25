@@ -1,0 +1,91 @@
+<!-- Preferences Panel -->
+<div id="preferences-panel" style="padding: 12px;">
+  <h3 style="font-size:13px; margin-bottom:10px;">Your Priorities</h3>
+
+  <div id="priority-tags" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px;">
+    <button class="priority-tag" data-value="vegan">🌱 Vegan</button>
+    <button class="priority-tag" data-value="plastic-free">♻️ Plastic-free</button>
+    <button class="priority-tag" data-value="carbon-neutral">💨 Carbon Neutral</button>
+    <button class="priority-tag" data-value="fair-trade">🤝 Fair Trade</button>
+    <button class="priority-tag" data-value="cruelty-free">🐰 Cruelty-free</button>
+  </div>
+
+  <h3 style="font-size:13px; margin-bottom:10px;">Saved Products</h3>
+  <div id="saved-products-list"></div>
+</div>
+
+<!-- Comparison View -->
+<div id="comparison-panel" style="display:none; padding:12px;">
+  <button id="close-compare" style="float:right; font-size:11px;">✕ Close</button>
+  <h3 style="font-size:13px; margin-bottom:12px;">Side-by-side Comparison</h3>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+    <!-- Current Product -->
+    <div id="compare-current" style="padding:10px; border:1px solid #eee; border-radius:8px; background:#fff8f8;">
+      <div style="font-size:10px; color:#999; margin-bottom:4px;">CURRENT</div>
+      <div id="compare-current-name"  style="font-size:12px; font-weight:600;"></div>
+      <div id="compare-current-score" style="font-size:24px; font-weight:700; color:#e74c3c; margin:6px 0;"></div>
+      <div id="compare-current-tags"  style="font-size:11px; color:#666;"></div>
+    </div>
+
+    <!-- Alternative -->
+    <div id="compare-alt" style="padding:10px; border:2px solid #16a34a; border-radius:8px; background:#f0fdf4;">
+      <div style="font-size:10px; color:#16a34a; margin-bottom:4px;">BETTER CHOICE ✅</div>
+      <div id="compare-alt-name"  style="font-size:12px; font-weight:600;"></div>
+      <div id="compare-alt-score" style="font-size:24px; font-weight:700; color:#16a34a; margin:6px 0;"></div>
+      <div id="compare-alt-tags"  style="font-size:11px; color:#666;"></div>
+    </div>
+  </div>
+
+  <div id="compare-verdict" style="margin-top:12px; font-size:12px; color:#555; text-align:center;"></div>
+</div>
+
+<!-- AI Score Source Badge -->
+<div id="score-source"
+     style="font-size:11px; color:#6b7280; text-align:center; margin-bottom:8px;">
+</div>
+
+<!-- AI Summary -->
+<div id="ai-summary-section" style="padding:10px 14px; background:#f0fdf4; border-radius:8px; margin:10px 0;">
+  <div style="font-size:10px; font-weight:700; color:#15803d; margin-bottom:4px;">
+    🤖 AI ANALYSIS
+  </div>
+  <p id="ai-summary" style="font-size:12px; color:#374151; line-height:1.5;"></p>
+</div>
+
+<!-- Improvement Suggestions -->
+<div id="ai-improvements-section" style="padding:10px 14px; background:#fffbeb; border-radius:8px; margin:10px 0;">
+  <div style="font-size:10px; font-weight:700; color:#92400e; margin-bottom:6px;">
+    💡 HOW TO IMPROVE
+  </div>
+  <ul id="ai-improvements"
+      style="font-size:12px; color:#374151; padding-left:16px; line-height:1.8;">
+  </ul>
+</div>
+
+<!-- Feedback Section -->
+<div id="feedback-section" style="padding:12px; border-top:1px solid #e5e7eb; margin-top:8px;">
+  <div style="font-size:11px; font-weight:700; color:#6b7280; margin-bottom:8px;">
+    WAS THIS SCORE ACCURATE?
+  </div>
+  <div style="display:flex; gap:8px; margin-bottom:8px;">
+    <button class="feedback-btn" data-helpful="true"  
+            style="flex:1; padding:8px; border:1px solid #bbf7d0; border-radius:6px; background:#f0fdf4; cursor:pointer; font-size:13px;">
+      👍 Yes
+    </button>
+    <button class="feedback-btn" data-helpful="false" 
+            style="flex:1; padding:8px; border:1px solid #fecaca; border-radius:6px; background:#fff8f8; cursor:pointer; font-size:13px;">
+      👎 No
+    </button>
+  </div>
+  <input id="feedback-comment" 
+         placeholder="Optional comment..." 
+         style="width:100%; padding:7px 10px; border:1px solid #e5e7eb; border-radius:6px; font-size:12px; margin-bottom:8px;">
+  <button id="submit-feedback" 
+          style="width:100%; padding:8px; background:#16a34a; color:#fff; border:none; border-radius:6px; font-size:12px; cursor:pointer;">
+    Submit Feedback
+  </button>
+  <div id="feedback-thanks" style="display:none; text-align:center; font-size:12px; color:#15803d; margin-top:6px;">
+    ✅ Thanks for your feedback!
+  </div>
+</div>
