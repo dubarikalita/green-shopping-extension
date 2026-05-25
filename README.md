@@ -293,6 +293,3 @@ Then reload the extension at `chrome://extensions`.
 
 ---
 
-## 📄 License
-
-MIT License — free to use, modify, and distribute.
