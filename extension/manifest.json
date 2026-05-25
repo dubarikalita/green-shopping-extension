@@ -17,7 +17,8 @@
     "https://www.etsy.com/*",
     "https://shopping.google.com/*",
     "https://www.google.com/*",
-    "http://localhost:3000/*"
+    "http://localhost:3000/*",
+    "https://green-shopping-extension.onrender.com/*"
   ],
 
   "background": {

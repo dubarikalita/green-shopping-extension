@@ -1,5 +1,4 @@
-const API_BASE = 'http://localhost:3000';
-
+const API_BASE = 'https://green-shopping-extension.onrender.com';
 async function fetchScore(title, description, brand, category = 'water-bottle') {
   try {
     const params = new URLSearchParams({ title, description, brand, category });
